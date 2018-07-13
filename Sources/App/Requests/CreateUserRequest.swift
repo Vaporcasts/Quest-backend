@@ -11,5 +11,4 @@ import FluentPostgreSQL
 struct CreateUserRequest: Content {
     var uniqueId: String
     
- 
 }

@@ -7,6 +7,12 @@ final class Comment: PostgreSQLModel {
     var postId: Post.ID
     var content:String 
     var avatarId:Avatar.ID
+    
+    var createdAt: Date?
+    var updatedAt: Date?
+    
+    static var createdAtKey: TimestampKey? = \.createdAt
+    static var updatedAtKey: TimestampKey? = \.updatedAt
 
     init(postId: Post.ID,  id: Int,  content: String,  avatarId: Avatar.ID)  {
         self.postId = postId 
