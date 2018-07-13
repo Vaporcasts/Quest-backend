@@ -6,7 +6,7 @@ final class Post: PostgreSQLModel {
     var id:Int?
     var content:String 
     var voteCount:Int 
-    var userId: User.ID
+    var uniqueUserId: String
     
     var createdAt: Date?
     var updatedAt: Date?
@@ -14,11 +14,10 @@ final class Post: PostgreSQLModel {
     static var createdAtKey: TimestampKey? = \.createdAt
     static var updatedAtKey: TimestampKey? = \.updatedAt
 
-    init(id: Int,  content: String,  voteCount: Int,  userId: User.ID)  {
-        self.id = id 
+    init(content: String,  voteCount: Int,  uniqueUserId: String)  {
         self.content = content 
         self.voteCount = voteCount 
-        self.userId = userId 
+        self.uniqueUserId = uniqueUserId
     }
 }
 

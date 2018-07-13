@@ -11,5 +11,5 @@ import FluentPostgreSQL
 
 struct CreatePostRequest: Content {
     var content: String
-    var userId: String
+    var uniqueUserId: String
 }
