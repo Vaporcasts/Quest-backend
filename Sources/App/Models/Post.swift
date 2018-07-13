@@ -22,3 +22,13 @@ final class Post: PostgreSQLModel {
 }
 
 extension Post: Migration, Content {}
+
+struct PostWithComments: Content {
+    var id:Int?
+    var content:String
+    var voteCount:Int
+    var uniqueUserId: String
+    
+    var replies: [Comment]
+    
+}

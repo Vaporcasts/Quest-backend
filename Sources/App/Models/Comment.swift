@@ -14,9 +14,8 @@ final class Comment: PostgreSQLModel {
     static var createdAtKey: TimestampKey? = \.createdAt
     static var updatedAtKey: TimestampKey? = \.updatedAt
 
-    init(postId: Post.ID,  id: Int,  content: String,  avatarId: Avatar.ID)  {
+    init(postId: Post.ID, content: String,  avatarId: Avatar.ID)  {
         self.postId = postId 
-        self.id = id 
         self.content = content 
         self.avatarId = avatarId 
     }

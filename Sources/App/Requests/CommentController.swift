@@ -17,9 +17,9 @@ extension CommentController: RouteCollection {
 
 class CommentController {
     func createComment(_ request: Request) throws -> Future<HTTPStatus> {
-        return try request.content.decode(CreateUserRequest.self).flatMap(to: HTTPStatus.self, { createUserRequest in
-            let newUser = User(uniqueId: createUserRequest.uniqueId)
-            return newUser.save(on: request).transform(to: HTTPStatus.created)
+        return try request.content.decode(CreateCommentRequest.self).flatMap(to: HTTPStatus.self, { createUserRequest in
+            let comment = Comment(postId: createUserRequest.postId, content: createUserRequest.content, avatarId: createUserRequest.avatarId)
+            return comment.save(on: request).transform(to: HTTPStatus.created)
         })
     }
 }
