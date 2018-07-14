@@ -11,7 +11,7 @@ import FluentPostgreSQL
 
 extension UserController: RouteCollection {
     func boot(router: Router) throws {
-        router.post("/register", use: createUser)
+        router.post("register", use: createUser)
     }
 }
 

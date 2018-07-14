@@ -7,6 +7,8 @@ final class Comment: PostgreSQLModel {
     var postId: Post.ID
     var content:String 
     var avatarId:Avatar.ID
+    var userId: String
+    var voteCount: Int
     
     var createdAt: Date?
     var updatedAt: Date?
@@ -14,10 +16,12 @@ final class Comment: PostgreSQLModel {
     static var createdAtKey: TimestampKey? = \.createdAt
     static var updatedAtKey: TimestampKey? = \.updatedAt
 
-    init(postId: Post.ID, content: String,  avatarId: Avatar.ID)  {
+    init(postId: Post.ID, content: String,  avatarId: Avatar.ID, userId: String, voteCount: Int)  {
         self.postId = postId 
         self.content = content 
-        self.avatarId = avatarId 
+        self.avatarId = avatarId
+        self.userId = userId
+        self.voteCount = voteCount
     }
 }
 

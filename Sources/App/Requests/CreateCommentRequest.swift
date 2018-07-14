@@ -11,5 +11,5 @@ import FluentPostgreSQL
 struct CreateCommentRequest: Content {
     var postId: Post.ID
     var content: String
-    var avatarId: Avatar.ID
+    var authorId: String
 }

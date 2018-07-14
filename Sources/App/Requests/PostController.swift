@@ -12,13 +12,13 @@ import FluentPostgreSQL
 extension PostController: RouteCollection {
     func boot(router: Router) throws {
         router.get("getPosts", Int.parameter, use: getPagedPosts)
-        router.post("/createPost", use: createPost)
+        router.post("createPost", use: createPost)
         router.get("getPost", Int.parameter, use: getPost)
     }
 }
 
 class PostController {
-    let limit = 15
+    let limit = 6
     
     func getPost(_ request: Request) throws -> Future<PostWithComments> {
         let postId = try request.parameters.next(Int.self)
@@ -32,8 +32,8 @@ class PostController {
     
     func getPagedPosts(_ request: Request) throws -> Future<[Post]> {
         let pageNumber = try request.parameters.next(Int.self)
-        let lower = (pageNumber - 1) * limit
-        return Post.query(on: request).range(lower: lower, upper: lower + limit).all()
+        let lower = pageNumber == 1 ? 0 : ((pageNumber - 1) * limit) + 1
+        return Post.query(on: request).range(lower: lower, upper: lower + limit).sort(\Post.createdAt, PostgreSQLDirection._descending).all()
     }
     
     func createPost(_ request: Request) throws -> Future<HTTPStatus> {
