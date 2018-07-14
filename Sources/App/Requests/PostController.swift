@@ -36,10 +36,10 @@ class PostController {
         return Post.query(on: request).range(lower: lower, upper: lower + limit).sort(\Post.createdAt, PostgreSQLDirection._descending).all()
     }
     
-    func createPost(_ request: Request) throws -> Future<HTTPStatus> {
-        return try request.content.decode(CreatePostRequest.self).flatMap(to: HTTPStatus.self, { createUserRequest in
+    func createPost(_ request: Request) throws -> Future<Post> {
+        return try request.content.decode(CreatePostRequest.self).flatMap(to: Post.self, { createUserRequest in
             let newPost = Post(content: createUserRequest.content, voteCount: 0, uniqueUserId: createUserRequest.uniqueUserId)
-            return newPost.save(on: request).transform(to: HTTPStatus.created)
+            return newPost.save(on: request)
         })
     }
 }

@@ -16,11 +16,14 @@ extension CommentController: RouteCollection {
 }
 
 class CommentController {
-    func createComment(_ request: Request) throws -> Future<HTTPStatus> {
-        return try request.content.decode(CreateCommentRequest.self).flatMap(to: HTTPStatus.self, { commentRequest in
-            let comment = Comment(postId:  commentRequest.postId, content: commentRequest.content, avatarId: 0, userId: commentRequest.authorId, voteCount: 0)
-            return comment.save(on: request).transform(to: HTTPStatus.created)
+    func createComment(_ request: Request) throws -> Future<Comment> {
+        return try request.content.decode(CreateCommentRequest.self).flatMap(to: Comment.self, { commentRequest in
+            return Comment.avatarId(forAuthor: commentRequest.authorId, forPost: commentRequest.postId, on: request).flatMap(to: Comment.self) { idForAvatar in
+                let comment = Comment(postId:  commentRequest.postId, content: commentRequest.content, avatarId: idForAvatar, userId: commentRequest.authorId, voteCount: 0)
+                return comment.save(on: request)
+            }
         })
     }
+    
 }
 

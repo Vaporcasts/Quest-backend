@@ -23,6 +23,29 @@ final class Comment: PostgreSQLModel {
         self.userId = userId
         self.voteCount = voteCount
     }
+    
+    static func avatarId(forAuthor commentAuthor: String, forPost postId: Post.ID, on request: Request) -> Future<Int> {
+        print("trying to retriev by postId: \(postId)")
+        return Comment.query(on: request).filter(\Comment.postId == postId).all().map(to: Int.self) { comments in
+            for comment in comments {
+                if comment.userId == commentAuthor {
+                    print("already commented")
+                    print("returning \(comment.avatarId)")
+                    return comment.avatarId
+                }
+            }
+            let takenIds = comments.map { $0.avatarId }
+            let allAvatarIds = [1, 2, 3]
+            for id in allAvatarIds {
+                if !takenIds.contains(id) {
+                    print("returning \(id)")
+                    return id
+                }
+            }
+            return 555
+        }
+        //
+    }
 }
 
 extension Comment: Migration, Content {}
