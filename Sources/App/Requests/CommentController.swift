@@ -12,6 +12,8 @@ import FluentPostgreSQL
 extension CommentController: RouteCollection {
     func boot(router: Router) throws {
         router.post("createComment", use: createComment)
+        router.post("upvoteComment", Int.parameter, use: upvoteComment)
+        router.post("downvoteComment", Int.parameter, use: downvoteComment)
     }
 }
 
@@ -23,6 +25,22 @@ class CommentController {
                 return comment.save(on: request)
             }
         })
+    }
+    
+    func downvoteComment(_ request: Request) throws -> Future<HTTPStatus> {
+        let postId = try request.parameters.next(Int.self)
+        return Comment.find(postId, on: request).unwrap(or: Abort.init(.notFound)).flatMap(to: HTTPStatus.self) { comment in
+            comment.voteCount = comment.voteCount - 1
+            return comment.save(on: request).transform(to: HTTPStatus.ok)
+        }
+    }
+    
+    func upvoteComment(_ request: Request) throws -> Future<HTTPStatus> {
+        let postId = try request.parameters.next(Int.self)
+        return Comment.find(postId, on: request).unwrap(or: Abort.init(.notFound)).flatMap(to: HTTPStatus.self) { comment in
+            comment.voteCount = comment.voteCount + 1
+            return comment.save(on: request).transform(to: HTTPStatus.ok)
+        }
     }
     
 }
