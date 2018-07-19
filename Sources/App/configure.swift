@@ -24,7 +24,7 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
         databaseConfig = (try PostgreSQLDatabaseConfig(url: url))!
     }
     else {
-        databaseConfig = PostgreSQLDatabaseConfig(hostname: "localhost", port: 5432, username: "anapaix", database: "quest", password: nil)
+        databaseConfig = PostgreSQLDatabaseConfig(hostname: "localhost", port: 5432, username: "joey", database: "quest", password: nil)
     }
     let database = PostgreSQLDatabase(config: databaseConfig)
     databases.add(database: database, as: .psql)
@@ -37,7 +37,6 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     migrations.add(model: Post.self, database: .psql)
     migrations.add(model: Avatar.self, database: .psql)
     migrations.add(model: Comment.self, database: .psql)
-    // migrations.add(migration: AddUserIdToComments.self, database: .psql)
     services.register(migrations)
 
 }

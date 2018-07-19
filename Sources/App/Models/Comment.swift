@@ -35,16 +35,13 @@ final class Comment: PostgreSQLModel {
                 }
             }
             let takenIds = comments.map { $0.avatarId }
-            let allAvatarIds = [1, 2, 3]
-            for id in allAvatarIds {
-                if !takenIds.contains(id) {
-                    print("returning \(id)")
-                    return id
-                }
-            }
+            let allAvatarIds = [1, 2, 3, 4, 5]
+            let possibleIds = allAvatarIds.filter({ (id) -> Bool in
+                return !takenIds.contains(id)
+            })
+            if let randomElement = possibleIds.random { return randomElement }
             return 555
         }
-        //
     }
 }
 

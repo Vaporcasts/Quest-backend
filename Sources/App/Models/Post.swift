@@ -7,6 +7,7 @@ final class Post: PostgreSQLModel {
     var content:String 
     var voteCount:Int 
     var uniqueUserId: String
+    var isFlagged: Bool
     
     var createdAt: Date?
     var updatedAt: Date?
@@ -18,6 +19,7 @@ final class Post: PostgreSQLModel {
         self.content = content 
         self.voteCount = voteCount 
         self.uniqueUserId = uniqueUserId
+        self.isFlagged = false
     }
 }
 

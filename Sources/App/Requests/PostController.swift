@@ -16,6 +16,7 @@ extension PostController: RouteCollection {
         router.get("getPost", Int.parameter, use: getPost)
         router.post("downvotePost", Int.parameter, use: downvotePost)
         router.post("upvotePost", Int.parameter, use: upvotePost)
+        router.post("flagPost", Int.parameter, use: flagPost)
     }
 }
 
@@ -46,7 +47,6 @@ class PostController {
     }
     
     func upvotePost(_ request: Request) throws -> Future<HTTPStatus> {
-        print("upvoting post")
         let postId = try request.parameters.next(Int.self)
         return Post.find(postId, on: request).unwrap(or: Abort.init(.notFound)).flatMap(to: HTTPStatus.self) { post in
             post.voteCount = post.voteCount + 1
@@ -55,10 +55,17 @@ class PostController {
     }
     
     func downvotePost(_ request: Request) throws -> Future<HTTPStatus> {
-        print("downvoting post")
         let postId = try request.parameters.next(Int.self)
         return Post.find(postId, on: request).unwrap(or: Abort.init(.notFound)).flatMap(to: HTTPStatus.self) { post in
             post.voteCount = post.voteCount - 1
+            return post.save(on: request).transform(to: HTTPStatus.ok)
+        }
+    }
+    
+    func flagPost(_ request: Request) throws -> Future<HTTPStatus> {
+        let postId = try request.parameters.next(Int.self)
+        return Post.find(postId, on: request).unwrap(or: Abort.init(.notFound)).flatMap(to: HTTPStatus.self) { post in
+            post.isFlagged = true
             return post.save(on: request).transform(to: HTTPStatus.ok)
         }
     }
