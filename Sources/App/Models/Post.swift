@@ -8,6 +8,7 @@ final class Post: PostgreSQLModel {
     var voteCount:Int 
     var uniqueUserId: String
     var isFlagged: Bool
+    var imageUrl: String?
     
     var createdAt: Date?
     var updatedAt: Date?
@@ -15,11 +16,12 @@ final class Post: PostgreSQLModel {
     static var createdAtKey: TimestampKey? = \.createdAt
     static var updatedAtKey: TimestampKey? = \.updatedAt
 
-    init(content: String,  voteCount: Int,  uniqueUserId: String)  {
+    init(content: String,  voteCount: Int,  uniqueUserId: String, imageUrl: String?)  {
         self.content = content 
         self.voteCount = voteCount 
         self.uniqueUserId = uniqueUserId
         self.isFlagged = false
+        self.imageUrl = imageUrl
     }
 }
 

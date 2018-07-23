@@ -12,4 +12,5 @@ import FluentPostgreSQL
 struct CreatePostRequest: Content {
     var content: String
     var uniqueUserId: String
+    var imageUrl: String?
 }

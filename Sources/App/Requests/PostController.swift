@@ -41,7 +41,7 @@ class PostController {
     
     func createPost(_ request: Request) throws -> Future<Post> {
         return try request.content.decode(CreatePostRequest.self).flatMap(to: Post.self, { createUserRequest in
-            let newPost = Post(content: createUserRequest.content, voteCount: 0, uniqueUserId: createUserRequest.uniqueUserId)
+            let newPost = Post(content: createUserRequest.content, voteCount: 0, uniqueUserId: createUserRequest.uniqueUserId, imageUrl: createUserRequest.imageUrl)
             return newPost.save(on: request)
         })
     }
