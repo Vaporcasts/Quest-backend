@@ -15,6 +15,10 @@ final class Comment: PostgreSQLModel {
     
     static var createdAtKey: TimestampKey? = \.createdAt
     static var updatedAtKey: TimestampKey? = \.updatedAt
+    
+    var post: Parent<Comment, Post> {
+        return parent(\.postId)
+    }
 
     init(postId: Post.ID, content: String,  avatarId: Avatar.ID, userId: String, voteCount: Int)  {
         self.postId = postId 

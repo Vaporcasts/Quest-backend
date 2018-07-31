@@ -33,10 +33,12 @@ class PostController {
         })
     }
     
-    func getPagedPosts(_ request: Request) throws -> Future<[Post]> {
+    func getPagedPosts(_ request: Request) throws -> Future<[FrontPagePosts]> {
         let pageNumber = try request.parameters.next(Int.self)
         let lower = pageNumber == 1 ? 0 : ((pageNumber - 1) * limit) + 1
-        return Post.query(on: request).range(lower: lower, upper: lower + limit).sort(\Post.createdAt, PostgreSQLDirection._descending).all()
+        return Post.query(on: request).range(lower: lower, upper: lower + limit).sort(\Post.createdAt, PostgreSQLDirection._descending).all().flatMap(to: [FrontPagePosts].self) { (posts) in
+            return try posts.convertToFrontPagePosts(with: request).flatten(on: request)
+        }
     }
     
     func createPost(_ request: Request) throws -> Future<Post> {
