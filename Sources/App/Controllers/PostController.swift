@@ -41,10 +41,12 @@ class PostController {
         }
     }
     
-    func createPost(_ request: Request) throws -> Future<Post> {
-        return try request.content.decode(CreatePostRequest.self).flatMap(to: Post.self, { createUserRequest in
+    func createPost(_ request: Request) throws -> Future<FrontPagePosts> {
+        return try request.content.decode(CreatePostRequest.self).flatMap(to: FrontPagePosts.self, { createUserRequest in
             let newPost = Post(content: createUserRequest.content, voteCount: 0, uniqueUserId: createUserRequest.uniqueUserId, imageUrl: createUserRequest.imageUrl)
-            return newPost.save(on: request)
+            return newPost.save(on: request).map(to: FrontPagePosts.self) { justCreatedPost in
+              return FrontPagePosts(id: justCreatedPost.id, content: justCreatedPost.content, voteCount: justCreatedPost.voteCount, uniqueUserId: justCreatedPost.uniqueUserId, isFlagged: justCreatedPost.isFlagged, imageUrl: justCreatedPost.imageUrl, createdAt: justCreatedPost.createdAt, updatedAt: justCreatedPost.updatedAt, commentCount: 0)
+            }
         })
     }
     
